@@ -1,8 +1,8 @@
-// 1. استيراد مكتبات Firebase اللازمة
+// 1. استيراد مكتبات Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// 2. إعدادات مشروعك الحقيقية من الـ Firebase Console
+// 2. إعدادات Firebase الخاصة بمشروعك (من الصورة اللي بعتها)
 const firebaseConfig = {
   apiKey: "AIzaSyBEqkFs4g83-34SUBFTxiwX9lcXkFIsbp0",
   authDomain: "top-chat-267af.firebaseapp.com",
@@ -17,7 +17,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// --- وظيفة صفحة البروفايل (حفظ البيانات) ---
+// --- [وظيفة حفظ البيانات في البروفايل] ---
 window.saveProfile = function() {
     const name = document.getElementById('name').value;
     const phone = document.getElementById('phone').value;
@@ -29,45 +29,56 @@ window.saveProfile = function() {
             username: name,
             phone: phone,
             bio: bio,
-            id: myID,
-            lastSeen: new Date().toLocaleString()
+            id: myID
         }).then(() => {
-            document.getElementById('status').innerText = "✅ تم الحفظ في السيرفر بنجاح!";
-            document.getElementById('status').style.color = "green";
+            document.getElementById('status').innerText = "✅ تم الحفظ بنجاح!";
+            document.getElementById('status').style.color = "#00a884";
         }).catch((error) => {
-            alert("خطأ في الحفظ: " + error.message);
+            alert("حدث خطأ أثناء الحفظ: " + error.message);
         });
     } else {
-        alert("يا أسامة لازم تكتب الاسم ورقم التليفون الأول!");
+        alert("من فضلك اكتب الاسم ورقم الهاتف");
     }
 }
 
-// --- وظيفة صفحة البحث (البحث عن ID) ---
+// --- [وظيفة البحث عن صديق بالـ ID] ---
 window.searchUser = function() {
     const searchId = document.getElementById('searchInput').value.trim();
     const resultDiv = document.getElementById('searchResult');
 
-    if(!searchId) return alert("اكتب الـ ID اللي عايز تدور عليه");
+    if(!searchId) {
+        resultDiv.innerHTML = '<p style="text-align:center; color:#8696a0;">اكتب الـ ID للبحث</p>';
+        return;
+    }
 
     const dbRef = ref(getDatabase());
     get(child(dbRef, `users/${searchId}`)).then((snapshot) => {
         if (snapshot.exists()) {
             const data = snapshot.val();
+            // إظهار النتيجة بتصميم الـ Dark Mode اللي زي واتساب
             resultDiv.innerHTML = `
-                <div style="background: #f0f0f0; padding: 15px; border-radius: 10px; margin-top: 10px;">
-                    <p><b>الاسم:</b> ${data.username}</p>
-                    <p><b>الحالة:</b> ${data.bio}</p>
-                    <button onclick="startChat('${data.id}')" style="background: #25d366; color: white; border: none; padding: 5px 10px; border-radius: 5px;">بدء دردشة</button>
+                <div class="user-card" onclick="startChat('${data.id}')" style="display: flex; align-items: center; padding: 15px; border-bottom: 0.5px solid #222d34; cursor: pointer;">
+                    <div class="user-avatar" style="width: 50px; height: 50px; background: #687782; border-radius: 50%; margin-left: 15px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: white;">
+                        ${data.username.charAt(0).toUpperCase()}
+                    </div>
+                    <div class="user-details" style="flex: 1;">
+                        <b style="font-size: 17px; display: block; color: #e9edef;">${data.username}</b>
+                        <p style="color: #8696a0; font-size: 14px; margin: 0;">${data.bio || 'متوفر'}</p>
+                    </div>
+                    <span style="color:#00a884; font-size: 12px; font-weight: bold;">${data.id}</span>
                 </div>
             `;
         } else {
-            resultDiv.innerHTML = "<p style='color:red;'>الـ ID ده مش موجود في السيرفر!</p>";
+            resultDiv.innerHTML = '<p style="text-align:center; color:#ff4b4b; margin-top:20px;">الـ ID ده مش موجود!</p>';
         }
     }).catch((error) => {
         console.error(error);
+        alert("خطأ في الاتصال بالسيرفر");
     });
 }
 
+// --- [وظيفة بدء الدردشة] ---
 window.startChat = function(userId) {
-    alert("جارٍ فتح الشات مع: " + userId + " (الميزة دي هنبرمجها الخطوة الجاية)");
+    // دي الخطوة الجاية اللي هنعمل فيها صفحة المحادثة
+    alert("سيتم فتح المحادثة مع: " + userId);
 }
