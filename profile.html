@@ -3,76 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إنشاء الحساب - واتساب أسامة</title>
+    <title>تعديل البروفايل - واتساب أسامة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: Arial; background-color: #ece5dd; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .profile-card { background: white; padding: 25px; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        .profile-img-upload { width: 100px; height: 100px; background: #ddd; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px dashed #075E54; overflow: hidden; }
-        .profile-img-upload img { width: 100%; height: 100%; object-fit: cover; }
-        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-family: Arial; }
-        .id-display { background: #e1f5fe; color: #01579b; padding: 10px; border-radius: 5px; font-weight: bold; margin: 15px 0; display: none; }
-        button { width: 100%; padding: 12px; background: #075E54; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
-        button:hover { background: #128C7E; }
+        :root {
+            --wa-dark-bg: #0b141a;
+            --wa-header-bg: #202c33;
+            --wa-green: #00a884;
+            --wa-text: #e9edef;
+        }
+        body { font-family: Arial, sans-serif; background-color: var(--wa-dark-bg); color: var(--wa-text); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .profile-pic { width: 120px; height: 120px; background: #687782; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 50px; margin-bottom: 20px; color: white; position: relative; }
+        .edit-icon { position: absolute; bottom: 5px; right: 5px; background: var(--wa-green); width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; border: 3px solid var(--wa-dark-bg); }
+        .input-group { width: 100%; max-width: 400px; margin-bottom: 20px; }
+        label { display: block; color: var(--wa-green); margin-bottom: 5px; font-size: 14px; }
+        input, textarea { width: 100%; padding: 12px; background: #202c33; border: none; border-bottom: 2px solid #2a3942; color: white; border-radius: 8px; outline: none; box-sizing: border-box; }
+        input:focus { border-bottom-color: var(--wa-green); }
+        .id-section { background: #182229; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 25px; width: 100%; max-width: 400px; }
+        .save-btn { background: var(--wa-green); color: #0b141a; border: none; padding: 15px 40px; border-radius: 30px; font-weight: bold; cursor: pointer; width: 100%; max-width: 400px; }
+        #status { margin-top: 15px; font-size: 14px; }
+        .back-btn { margin-top: 20px; color: var(--wa-green); text-decoration: none; }
     </style>
 </head>
 <body>
 
-<div class="profile-card">
-    <h2 style="color: #075E54;">إنشاء ملف شخصي</h2>
-    
-    <div class="profile-img-upload" onclick="document.getElementById('fileInput').click()">
-        <span id="plus">+</span>
-        <input type="file" id="fileInput" style="display:none" accept="image/*" onchange="previewImage(event)">
-        <img id="preview" style="display:none">
+    <div class="profile-pic">
+        <i class="fas fa-user"></i>
+        <div class="edit-icon"><i class="fas fa-camera"></i></div>
     </div>
 
-    <input type="text" id="userName" placeholder="الاسم بالكامل">
-    <input type="tel" id="userPhone" placeholder="رقم التليفون">
-    <textarea id="userBio" placeholder="السيرة الذاتية (Bio)"></textarea>
+    <div class="id-section">
+        <span style="color: #8696a0;">الـ ID الخاص بك:</span><br>
+        <strong id="myIdDisplay" style="font-size: 20px; color: white;">OS-2581</strong>
+        <i class="fas fa-copy" onclick="copyID('OS-2581')" style="margin-right: 10px; cursor: pointer; color: var(--wa-green);"></i>
+    </div>
 
-    <div id="idBox" class="id-display"></div>
+    <div class="input-group">
+        <label>الاسم</label>
+        <input type="text" id="name" placeholder="اكتب اسمك هنا...">
+    </div>
 
-    <button id="saveBtn" onclick="generateID()">حفظ وإنشاء ID</button>
-</div>
+    <div class="input-group">
+        <label>رقم الهاتف</label>
+        <input type="text" id="phone" placeholder="01xxxxxxxxx">
+    </div>
 
-<script>
-    function previewImage(event) {
-        var reader = new FileReader();
-        reader.onload = function() {
-            var output = document.getElementById('preview');
-            var plus = document.getElementById('plus');
-            output.src = reader.result;
-            output.style.display = 'block';
-            plus.style.display = 'none';
-        }
-        reader.readAsDataURL(event.target.files[0]);
-    }
+    <div class="input-group">
+        <label>الأخبار (Bio)</label>
+        <textarea id="bio" rows="2" placeholder="اكتب حالتك..."></textarea>
+    </div>
 
-    function generateID() {
-        var name = document.getElementById('userName').value;
-        if (name === "") {
-            alert("اكتب اسمك الأول يا أسامة!");
-            return;
-        }
+    <button class="save-btn" onclick="saveProfile()">حفظ التغييرات</button>
+    
+    <div id="status"></div>
 
-        // إنشاء ID عشوائي
-        var randomID = "OS-" + Math.floor(1000 + Math.random() * 9000);
-        
-        var idBox = document.getElementById('idBox');
-        idBox.innerText = "الـ ID الخاص بك هو: " + randomID;
-        idBox.style.display = "block";
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-right"></i> العودة للدردشات</a>
 
-        document.getElementById('saveBtn').innerText = "تم الحفظ بنجاح";
-        document.getElementById('saveBtn').style.background = "#25D366";
-
-        // تخزين مؤقت في المتصفح (للتجربة)
-        localStorage.setItem("myID", randomID);
-        localStorage.setItem("myName", name);
-
-        alert("تم إنشاء حسابك! الـ ID بتاعك هو " + randomID + ". احفظه عشان الناس تبحث عنك بيه.");
-    }
-</script>
-
+    <script type="module" src="script.js"></script>
 </body>
 </html>
-
