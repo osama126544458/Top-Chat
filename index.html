@@ -3,40 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>واتساب أسامة - القائمة الرئيسية</title>
+    <title>واتساب أسامة - Dark</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding: 0; }
-        .header { background-color: #008069; color: white; padding: 20px; text-align: center; position: sticky; top: 0; z-index: 100; }
-        .search-container { padding: 15px; background: white; display: flex; gap: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 25px; outline: none; }
-        button { padding: 10px 20px; background-color: #008069; color: white; border: none; border-radius: 25px; cursor: pointer; }
-        .chat-list { padding: 15px; }
-        .user-card { background: white; padding: 15px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .user-info b { display: block; color: #111; font-size: 16px; }
-        .user-info span { color: #666; font-size: 14px; }
-        .btn-chat { background-color: #25d366; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px; font-size: 14px; border: none; }
-        .no-result { text-align: center; color: #888; margin-top: 50px; }
-        .profile-link { display: block; text-align: center; margin-top: 20px; color: #008069; text-decoration: none; font-weight: bold; }
+        :root {
+            --wa-dark-bg: #0b141a;
+            --wa-header-bg: #202c33;
+            --wa-text-main: #e9edef;
+            --wa-text-dim: #8696a0;
+            --wa-green: #00a884;
+        }
+
+        body { font-family: Arial, sans-serif; background-color: var(--wa-dark-bg); color: var(--wa-text-main); margin: 0; padding-bottom: 70px; }
+        
+        .header { background-color: var(--wa-header-bg); padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .header h2 { margin: 0; font-size: 20px; }
+        .header-icons { color: var(--wa-text-dim); display: flex; gap: 20px; font-size: 20px; }
+
+        .search-box { padding: 10px 15px; background-color: var(--wa-dark-bg); }
+        .search-inner { background: #202c33; border-radius: 25px; display: flex; align-items: center; padding: 8px 15px; }
+        .search-inner input { background: transparent; border: none; color: white; flex: 1; padding: 5px; outline: none; }
+        .search-inner i { color: var(--wa-text-dim); margin-left: 10px; }
+
+        .chat-list { padding: 10px 0; }
+        .user-card { display: flex; align-items: center; padding: 15px; border-bottom: 0.5px solid #222d34; cursor: pointer; }
+        .user-avatar { width: 50px; height: 50px; background: #687782; border-radius: 50%; margin-left: 15px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; }
+        .user-details { flex: 1; }
+        .user-details b { font-size: 17px; display: block; margin-bottom: 5px; }
+        .user-details p { color: var(--wa-text-dim); font-size: 14px; margin: 0; }
+        
+        /* شريط التنقل السفلي زي الصورة */
+        .nav-bottom { position: fixed; bottom: 0; width: 100%; background: #202c33; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #2a3942; }
+        .nav-item { text-align: center; color: var(--wa-text-dim); font-size: 12px; text-decoration: none; position: relative; }
+        .nav-item i { font-size: 20px; display: block; margin-bottom: 5px; }
+        .nav-item.active { color: #d9fdd3; }
+        .nav-item.active .badge { background: var(--wa-green); color: #0b141a; padding: 2px 6px; border-radius: 10px; font-size: 10px; font-weight: bold; position: absolute; top: -5px; right: 10px; }
+
+        .floating-btn { position: fixed; bottom: 85px; left: 20px; background: var(--wa-green); width: 55px; height: 55px; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: #0b141a; font-size: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>واتساب أسامة</h1>
+        <h2>واتساب</h2>
+        <div class="header-icons">
+            <i class="fas fa-camera"></i>
+            <i class="fas fa-ellipsis-v"></i>
+        </div>
     </div>
 
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="ابحث عن صديق بالـ ID (مثلاً: OS-2581)">
-        <button onclick="searchUser()">بحث</button>
+    <div class="search-box">
+        <div class="search-inner">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="اسأل Meta AI أو ابحث" onkeyup="if(event.key === 'Enter') searchUser()">
+        </div>
     </div>
 
     <div id="searchResult" class="chat-list">
-        <div class="no-result">اكتب الـ ID بتاع صاحبك عشان تظهر بياناته هنا</div>
+        </div>
+
+    <div class="floating-btn">
+        <i class="fas fa-comment-medical"></i>
     </div>
 
-    <a href="profile.html" class="profile-link">تعديل ملفي الشخصي</a>
+    <div class="nav-bottom">
+        <a href="#" class="nav-item active">
+            <span class="badge">20</span>
+            <i class="fas fa-comment"></i>
+            الدردشات
+        </a>
+        <a href="#" class="nav-item"><i class="fas fa-sync-alt"></i>التحديثات</a>
+        <a href="#" class="nav-item"><i class="fas fa-users"></i>المجتمعات</a>
+        <a href="#" class="nav-item"><i class="fas fa-phone"></i>المكالمات</a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i>بروفايلي</a>
+    </div>
 
     <script type="module" src="script.js"></script>
-
 </body>
 </html>
